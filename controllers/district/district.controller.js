@@ -4,9 +4,8 @@ const State = require('../../models/State');
 exports.getDistricts = async(req, res, next) => {
     try {
         const state = req.query.state;
-        const states = await State.findOne({ stateName: state });
-        const districts = await District.find({ state: states._id });
-        res.status(200).json({ Districts: districts, message: 'Districts found successfully' });
+        const states = await State.findOne({ stateName: state }).populate('districts');
+        res.status(200).json({ Districts: states.districts, message: 'Districts found successfully' });
     } catch (err) {
         if (!err.statusCode) {
             err.statusCode = 500;
